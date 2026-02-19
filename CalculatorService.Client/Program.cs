@@ -46,6 +46,8 @@ app.MapGet("/", async ([FromServices] IHttpClientFactory factory) =>
 
 app.Run();
 
+i still don't know what all that was  about lol
+
 */
 using CalculatorService.Client;
 using CalculatorService.Core.Models;
@@ -56,11 +58,15 @@ var baseUrl = "http://localhost:5271";
 var client = new CalculatorApiClient(baseUrl);
 
 Console.WriteLine("Enter numbers to add separated by space:");
-var input = Console.ReadLine();
-var numbers = input.Split(' ')
-    .Select(x => double.TryParse(x, out var n) ? n : double.NaN)
-    .Where(x => !double.IsNaN(x))
-    .ToList();
+var input = Console.ReadLine() ?? string.Empty;
+
+var numbers = new List<double>();
+foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+{
+    if (double.TryParse(part, out var n))
+        numbers.Add(n);
+}
+
 Console.WriteLine("Enter optional Tracking ID. Leave empty for no tracking id record");
 var trackingId = Console.ReadLine();
 
@@ -77,6 +83,44 @@ catch (Exception ex)
 {
     Console.WriteLine($"Error: {ex.Message}");
 }
+
+
+Console.WriteLine("Do you want to see journal entries? Y/N");
+
+string answer = Console.ReadLine();
+
+answer = answer.ToLower();
+
+switch(answer)
+{
+    case "y":
+        //TODO
+        break;
+
+    case "n":
+        //TODO
+        break;
+
+    default:
+        //loop over until user puts the right input
+        break;
+}
+
+
+
+
+
+/*try
+{
+    answer = Console.ReadLine();
+
+} catch (Exception ex)
+{
+    Console.WriteLine("Debes responder solamente con  'y'  o con 'n' ");
+}*/
+
+
+
 
 Console.WriteLine("Press any key to exit program");
 Console.ReadKey();

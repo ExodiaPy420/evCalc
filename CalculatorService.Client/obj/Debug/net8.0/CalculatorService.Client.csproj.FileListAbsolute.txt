@@ -33,3 +33,4 @@ C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Client
 C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Client\obj\Debug\net8.0\CalculatorService.Client.pdb
 C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Client\obj\Debug\net8.0\CalculatorService.Client.genruntimeconfig.cache
 C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Client\obj\Debug\net8.0\ref\CalculatorService.Client.dll
+C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Client\obj\Debug\net8.0\CalculatorService.Client.sourcelink.json

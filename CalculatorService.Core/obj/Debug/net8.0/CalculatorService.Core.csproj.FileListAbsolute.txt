@@ -9,3 +9,4 @@ C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Core\o
 C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Core\obj\Debug\net8.0\refint\CalculatorService.Core.dll
 C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Core\obj\Debug\net8.0\CalculatorService.Core.pdb
 C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Core\obj\Debug\net8.0\ref\CalculatorService.Core.dll
+C:\Users\aboca_evicertia\source\repos\CalculatorService\CalculatorService.Core\obj\Debug\net8.0\CalculatorService.Core.sourcelink.json

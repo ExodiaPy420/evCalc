@@ -47,5 +47,7 @@ namespace CalculatorService.Server.Controllers
                 return StatusCode(500, new { ErrorMessage = ex.Message });
             }
         }
+
+
     }
 }

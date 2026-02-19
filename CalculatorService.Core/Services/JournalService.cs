@@ -8,8 +8,8 @@ namespace CalculatorService.Core.Services
     public class JournalService : IJournalService
     {
        
-        private readonly ConcurrentDictionary<string, List<JournalEntry>> _journal = new();
-
+        //private readonly ConcurrentDictionary<string, List<JournalEntry>> _journal = new();
+        private readonly ConcurrentDictionary<string, ConcurrentQueue<JournalEntry>> _journal = new();
 
 
         public void Save(string trackingId, JournalEntry entry)
@@ -18,17 +18,19 @@ namespace CalculatorService.Core.Services
             if (string.IsNullOrWhiteSpace(trackingId)) return;
             //_journal.AddOrUpdate(trackingId, new List<JournalEntry> { entry , (key, existingList) => { lock (existingList)}) idk what i was even trying
 
-            _journal.AddOrUpdate(trackingId, new List<JournalEntry> { entry }, (key, existingList) =>
-            {
+
+            _journal.GetOrAdd(trackingId, _ => new ConcurrentQueue<JournalEntry>()).Enqueue(entry);
+            //_journal.AddOrUpdate(trackingId, new List<JournalEntry> { entry }, (key, existingList) =>
+            /*{
                 lock (existingList)
                 {
-                    existingList.Add(entry);
+                    existingList.GetOrAdd(key, _ => new ConcurrentQueue<JournalEntry>()).Enqueue(entry);
                 }
                 return existingList;
             }
-        );
-            
-       }
+        );*/
+
+        }
 
 
 
