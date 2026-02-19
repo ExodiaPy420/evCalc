@@ -89,22 +89,80 @@ Console.WriteLine("Do you want to see journal entries? Y/N");
 
 string answer = Console.ReadLine();
 
-answer = answer.ToLower();
+answer = answer?.ToLowerInvariant();
 
-switch(answer)
+
+//maybe a switch loop is not the best decision for this kind of user input choice but i can't think rn
+/*switch(answer)
 {
     case "y":
         //TODO
+        Console.WriteLine("Enter the journal's tracking id you want to see:");
+        var findTrackingId = Console.ReadLine();
+
+        //Console.WriteLine(client.GetJournalAsync(findTrackingId).ToString());
+
+
+        var journalEntries = await client.GetJournalAsync(findTrackingId);
+
+        if (!journalEntries.Any())
+        {
+            Console.WriteLine("No journal entries found for this Tracking ID.");
+        }
+        else
+        {
+            Console.WriteLine($"Journal entries for Tracking ID: {findTrackingId}");
+
+            foreach (var entry in journalEntries)
+            {
+                Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+            }
+        }
+
         break;
 
     case "n":
         //TODO
+        System.Environment.Exit(1);
         break;
 
     default:
         //loop over until user puts the right input
         break;
+}*/
+
+
+
+//idk what i was thinking while writing this i will change this asap cause this does the opposite of what i want to do i got confused with the brackets of the loop
+string findTrackingId;
+
+do
+{
+    Console.Write("Enter the tracking id you want to see the journal off:");
+    findTrackingId = Console.ReadLine();
+
+    if (findTrackingId != "y" && findTrackingId != "n")
+    {
+        Console.WriteLine("That is not a valid input. Please enter 'y'' or 'n'' ");
+    }
+} while (findTrackingId != "y" && findTrackingId != "n");
+
+var journalEntries = await client.GetJournalAsync(findTrackingId);
+
+if (!journalEntries.Any())
+{
+    Console.WriteLine("No journal entries found for this Tracking ID.");
 }
+else
+{
+    Console.WriteLine($"Journal entries for Tracking ID: {findTrackingId}");
+
+    foreach (var entry in journalEntries)
+    {
+        Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+    }
+}
+
 
 
 
