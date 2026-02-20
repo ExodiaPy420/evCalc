@@ -8,7 +8,7 @@ namespace CalculatorService.Core.Interfaces
         uint Add(IEnumerable<uint> addends);
 
         //double Subtract(double minuend, double subtrahend);
-        double Subtract(IEnumerable<double> operands);
+        double Subtract(double minuend, IEnumerable<double> subtrahends);
 
 
         double Multiply(IEnumerable<double> factors);
