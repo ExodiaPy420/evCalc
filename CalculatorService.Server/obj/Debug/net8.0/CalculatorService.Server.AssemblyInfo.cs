@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CalculatorService.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06b0cdcf11952edaee001c0c934221a35c6f3d2d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90b81a6e3dc2b4caa6e4de113c9939a082970dee")]
 [assembly: System.Reflection.AssemblyProductAttribute("CalculatorService.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CalculatorService.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

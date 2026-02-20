@@ -82,7 +82,7 @@ answer = answer?.ToLowerInvariant();
 
 
 
-//idk what i was thinking while writing this i will change this asap cause this does the opposite of what i want to do i got confused with the brackets of the loop
+//idk what i was thinking while writing this THIS IS BUGGED DOES NOT WORK PROPERLY 
 string findTrackingId;
 
 do
