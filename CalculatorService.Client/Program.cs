@@ -9,10 +9,10 @@ var client = new CalculatorApiClient(baseUrl);
 Console.WriteLine("Enter numbers to add separated by space:");
 var input = Console.ReadLine() ?? string.Empty;
 
-var numbers = new List<double>();
+var numbers = new List<uint>();
 foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
 {
-    if (double.TryParse(part, out var n))
+    if (uint.TryParse(part, out var n))
         numbers.Add(n);
 }
 
