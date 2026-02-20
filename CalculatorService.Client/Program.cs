@@ -67,7 +67,7 @@ do
 
 
 
-private static async Task RunAddNumbersAsync(CalculatorApiClient client, string? trackingId)
+static async Task RunAddNumbersAsync(CalculatorApiClient client, string? trackingId)
 {
     Console.WriteLine("Enter numbers to add separated by space:");
     var input = Console.ReadLine() ?? string.Empty;
