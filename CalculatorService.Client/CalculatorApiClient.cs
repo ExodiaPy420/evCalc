@@ -14,7 +14,7 @@ namespace CalculatorService.Client
             _httpClient = new HttpClient
             { BaseAddress = new Uri(baseUrl) };
         }
-        public async Task<AddResponse> AddAsync(IEnumerable<double> addends, string trackingId = null)
+        public async Task<AddResponse> AddAsync(IEnumerable<uint> addends, string trackingId = null)
         {
             var request = new AddRequest { Addends = addends };
 
