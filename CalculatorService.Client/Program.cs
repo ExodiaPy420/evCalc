@@ -35,10 +35,43 @@ catch (Exception ex)
 
 
 Console.WriteLine("Do you want to see journal entries? Y/N");
+string answer = Console.ReadLine()?.Trim().ToLowerInvariant();
 
-string answer = Console.ReadLine();
+if (answer == "y" || answer == "yes")
+{
+    string findTrackingId;
+    do
+    {
+        Console.Write("Enter the tracking ID you want to see the journal of: ");
+        findTrackingId = Console.ReadLine()?.Trim();
 
-answer = answer?.ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(findTrackingId))
+        {
+            Console.WriteLine("Tracking ID cannot be empty. Please try again.");
+        }
+        
+    }
+    while (string.IsNullOrWhiteSpace(findTrackingId));
+
+    var journalEntries = await client.GetJournalAsync(findTrackingId);
+
+    if (!journalEntries.Any())
+    {
+        Console.WriteLine("No journal entries found for this Tracking ID.");
+    }
+    else
+    {
+        Console.WriteLine($"Journal entries for Tracking ID: {findTrackingId}");
+        foreach (var entry in journalEntries)
+        {
+            Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+        }
+    }
+}
+else
+{
+    Console.WriteLine("Okay, no journal entries will be shown.");
+}
 
 
 //maybe a switch loop is not the best decision for this kind of user input choice but i can't think rn
@@ -79,39 +112,6 @@ answer = answer?.ToLowerInvariant();
         //loop over until user puts the right input
         break;
 }*/
-
-
-
-//idk what i was thinking while writing this THIS IS BUGGED DOES NOT WORK PROPERLY 
-string findTrackingId;
-
-do
-{
-    Console.Write("Enter the tracking id you want to see the journal off:");
-    findTrackingId = Console.ReadLine();
-
-    if (findTrackingId != "y" && findTrackingId != "n")
-    {
-        Console.WriteLine("That is not a valid input. Please enter 'y'' or 'n'' ");
-    }
-} while (findTrackingId != "y" && findTrackingId != "n");
-
-var journalEntries = await client.GetJournalAsync(findTrackingId);
-
-if (!journalEntries.Any())
-{
-    Console.WriteLine("No journal entries found for this Tracking ID.");
-}
-else
-{
-    Console.WriteLine($"Journal entries for Tracking ID: {findTrackingId}");
-
-    foreach (var entry in journalEntries)
-    {
-        Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
-    }
-}
-
 
 
 
