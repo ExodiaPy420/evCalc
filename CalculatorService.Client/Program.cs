@@ -1,37 +1,103 @@
 ﻿using CalculatorService.Client;
 using CalculatorService.Core.Models;
+using System.Runtime.CompilerServices;
 
 Console.WriteLine("calculator service client");
 
 var baseUrl = "http://localhost:5271";
 var client = new CalculatorApiClient(baseUrl);
 
-Console.WriteLine("Enter numbers to add separated by space:");
-var input = Console.ReadLine() ?? string.Empty;
 
-var numbers = new List<uint>();
-foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-{
-    if (uint.TryParse(part, out var n))
-        numbers.Add(n);
-}
+
+Console.WriteLine("Evicertia Console-Based Calculator");
+
+Console.WriteLine("");
+
 
 Console.WriteLine("Enter optional Tracking ID. Leave empty for no tracking id record");
 var trackingId = Console.ReadLine();
+Console.Clear();
 
-try
+int selector;
+do
 {
-    var result = await client.AddAsync(numbers, trackingId);
+    Console.WriteLine("Choose the operation you desire to perform:");
+    Console.WriteLine("###########################################");
+    Console.WriteLine();
+    Console.WriteLine("1. Addition");
+    Console.WriteLine("2. Subtraction");
+    Console.WriteLine("3. Multiplication");
+    Console.WriteLine("4. Division");
+    Console.WriteLine("5. Square root");
+    Console.WriteLine("0. Close calculator");
+    Console.WriteLine();
+    Console.WriteLine("############################################");
 
-    Console.WriteLine($"Result: {result.Sum}");
+    int.TryParse(Console.ReadLine(), out selector);
 
-    if (!string.IsNullOrWhiteSpace(trackingId))
-        Console.WriteLine($"Tracking ID: {trackingId}");
-}
-catch (Exception ex)
+
+    switch (selector)
+    {
+        case 1:
+            //TODO ADD
+            break;
+
+        case 2:
+            //TODO SUB
+            break;
+
+        case 3:
+            //TODO MULT
+            break;
+
+        case 4:
+            //TODO DIV
+            break;
+
+        case 5:
+            //TODO SQRT
+            break;
+
+        case 0:
+            Console.WriteLine("Closing calculator....");
+            break;
+    }
+} while (selector != 0);
+
+
+
+
+private static async Task RunAddNumbersAsync(CalculatorApiClient client, string? trackingId)
 {
-    Console.WriteLine($"Error: {ex.Message}");
+    Console.WriteLine("Enter numbers to add separated by space:");
+    var input = Console.ReadLine() ?? string.Empty;
+
+    var numbers = new List<uint>();
+    foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+    {
+        if (uint.TryParse(part, out var n))
+            numbers.Add(n);
+    }
+
+
+    try
+    {
+        var result = await client.AddAsync(numbers, trackingId);
+
+        Console.WriteLine($"Result: {result.Sum}");
+
+        if (!string.IsNullOrWhiteSpace(trackingId))
+            Console.WriteLine($"Tracking ID: {trackingId}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+
 }
+
+
+
 
 
 Console.WriteLine("Do you want to see journal entries? Y/N");
@@ -72,6 +138,10 @@ else
 {
     Console.WriteLine("Okay, no journal entries will be shown.");
 }
+
+Console.WriteLine("Press any key to exit program");
+Console.ReadKey();
+
 
 
 //maybe a switch loop is not the best decision for this kind of user input choice but i can't think rn
@@ -127,8 +197,4 @@ else
 }*/
 
 
-
-
-Console.WriteLine("Press any key to exit program");
-Console.ReadKey();
 
