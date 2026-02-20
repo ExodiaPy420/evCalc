@@ -39,7 +39,7 @@ do
     switch (selector)
     {
         case 1:
-            //TODO ADD
+            await Add(client, trackingId);
             break;
 
         case 2:
@@ -67,7 +67,7 @@ do
 
 
 
-static async Task RunAddNumbersAsync(CalculatorApiClient client, string? trackingId)
+static async Task Add(CalculatorApiClient client, string? trackingId)
 {
     Console.WriteLine("Enter numbers to add separated by space:");
     var input = Console.ReadLine() ?? string.Empty;
