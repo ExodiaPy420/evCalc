@@ -7,15 +7,44 @@ namespace CalculatorService.Core.Services
 
         //public double Add(IEnumerable<double> addends) => addends.Sum();
 
-        public double Add(IEnumerable<double> addends)
+        public uint Add(IEnumerable<uint> addends)
         {
             if (addends == null || addends.Count() < 2) //addends.Take(2).Count() < 2???????????
                 throw new ArgumentException("At least two operands are required.");
 
-            return addends.Sum();
+            // the below for the workaround on uints not being allowed to perform LINQ operations
+            // is the one proposed by ai, i'm still looking into it to see if it really is best
+            // choice or not and i plan on reviewing and changing this. Will look for future alternatives.
+            // other alternative require different validations or changing the variable type we will use,
+            // could use regular int but then we need to add validation/checker for numbers to be only positive
+            using var enumerator = addends.GetEnumerator();
+            var first = enumerator.Current;
+            ulong sum = first;
+            do
+            {
+                sum += enumerator.Current;
+            } while (enumerator.MoveNext());
+
+            return checked((uint)sum);
+
+
+
+            //return addends.Sum();
         }
 
-        public double Subtract(double minuend, double subtrahend) => minuend - subtrahend;
+        //public double Subtract(double minuend, double subtrahend) => minuend - subtrahend;
+
+        public double Subtract(IEnumerable<double> operands) 
+        {
+            if (operands == null || operands.Count() < 2)
+                throw new ArgumentException("At least two operands are required ");
+
+
+            return operands.Sum();
+
+        }
+
+
 
         //public double Multiply(IEnumerable<double> factors) => factors.Aggregate(1.0, (acc, x) => acc * x);
 

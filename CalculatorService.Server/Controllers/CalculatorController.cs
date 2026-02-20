@@ -26,7 +26,7 @@ namespace CalculatorService.Server.Controllers
 
             try
             {
-                double sum = _calculator.Add(request.Addends);
+                uint sum = _calculator.Add(request.Addends);
 
                 string trackingId = Request.Headers["X-Evi-Tracking-Id"];
 

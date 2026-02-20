@@ -5,9 +5,11 @@ namespace CalculatorService.Core.Interfaces
     public interface ICalculatorOperations
     {
 
-        double Add(IEnumerable<double> addends);
+        uint Add(IEnumerable<uint> addends);
 
-        double Subtract(double minuend, double subtrahend);
+        //double Subtract(double minuend, double subtrahend);
+        double Subtract(IEnumerable<double> operands);
+
 
         double Multiply(IEnumerable<double> factors);
 
