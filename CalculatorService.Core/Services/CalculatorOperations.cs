@@ -12,10 +12,11 @@ namespace CalculatorService.Core.Services
             if (addends == null || addends.Count() < 2) //addends.Take(2).Count() < 2???????????
                 throw new ArgumentException("At least two operands are required.");
 
-            // the below for the workaround on uints not being allowed to perform LINQ operations
+            // the below workaround on uints not being allowed to perform LINQ operations
             // is the one proposed by ai, i'm still looking into it to see if it really is best
-            // choice or not and i plan on reviewing and changing this. Will look for future alternatives.
-            // other alternative require different validations or changing the variable type we will use,
+            // choice or not and i plan on reviewing and changing this since i don't usually like casting.
+            // Will look for future alternatives.
+            // Other alternative require different validations or changing the variable type we will use,
             // could use regular int but then we need to add validation/checker for numbers to be only positive
             using var enumerator = addends.GetEnumerator();
             var first = enumerator.Current;
