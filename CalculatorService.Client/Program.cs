@@ -67,6 +67,8 @@ do
 
 
 
+
+//maybe we should remove async from this, just maybe
 static async Task Add(CalculatorApiClient client, string? trackingId)
 {
     Console.WriteLine("Enter numbers to add separated by space:");
@@ -95,6 +97,8 @@ static async Task Add(CalculatorApiClient client, string? trackingId)
     }
 
 }
+
+
 
 
 
