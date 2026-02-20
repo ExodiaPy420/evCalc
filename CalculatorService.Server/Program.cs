@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICalculatorOperations, CalculatorOperations>();
 builder.Services.AddSingleton<IJournalService, JournalService>();
-builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.WriteIndented = false; });
+builder.Services.AddControllers(); //.AddJsonOptions(options => { options.JsonSerializerOptions.WriteIndented = false; });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
