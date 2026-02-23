@@ -38,6 +38,29 @@ namespace CalculatorService.Client
         }
 
 
+        public async Task<DivResponse> DivAsync(double dividend, double divisor, string trackingId = null)
+        {
+            var request = new DivRequest { Dividend = dividend, Divisor = divisor };
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/div")
+            {
+                Content = JsonContent.Create(request)
+            };
+
+            if (!string.IsNullOrWhiteSpace(trackingId))
+                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+
+            var response = await _httpClient.SendAsync(httpRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception($"API Error: {response.StatusCode} - {error}");
+            }
+
+            return await response.Content.ReadFromJsonAsync<DivResponse>();
+        }
+
         public async Task<MultResponse> MultAsync(IEnumerable<double> factors, string trackingId = null)
         {
             var request = new MultRequest { Factors = factors };
