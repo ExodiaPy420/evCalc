@@ -80,6 +80,8 @@ static async Task Sub(CalculatorApiClient client, string? trackingId)
     {
         if (double.TryParse(part, out var n))
             subtrahends.Add(n);
+        else
+            Console.WriteLine($"Warning: '{part}' is not a valid number and will be skipped.");
     }
 
     try
@@ -108,6 +110,8 @@ static async Task Mult(CalculatorApiClient client, string? trackingId)
     {
         if (double.TryParse(part, out var n))
             numbers.Add(n);
+        else
+            Console.WriteLine($"Warning: '{part}' is not a valid number and will be skipped.");
     }
 
     try
@@ -136,6 +140,8 @@ static async Task Add(CalculatorApiClient client, string? trackingId)
     {
         if (uint.TryParse(part, out var n))
             numbers.Add(n);
+        else
+            Console.WriteLine($"Warning: '{part}' is not a valid number and will be skipped.");
     }
 
 

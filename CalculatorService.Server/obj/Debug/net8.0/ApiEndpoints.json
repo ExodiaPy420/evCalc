@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "CalculatorService.Server.Controllers.CalculatorController",
+    "Method": "Mult",
+    "RelativePath": "calculator/mult",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CalculatorService.Core.Models.MultRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CalculatorService.Server.Controllers.CalculatorController",
     "Method": "Sub",
     "RelativePath": "calculator/sub",
     "HttpMethod": "POST",
