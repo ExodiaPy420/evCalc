@@ -49,6 +49,22 @@
   },
   {
     "ContainingType": "CalculatorService.Server.Controllers.CalculatorController",
+    "Method": "Sqrt",
+    "RelativePath": "calculator/sqrt",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CalculatorService.Core.Models.SqrtRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CalculatorService.Server.Controllers.CalculatorController",
     "Method": "Sub",
     "RelativePath": "calculator/sub",
     "HttpMethod": "POST",

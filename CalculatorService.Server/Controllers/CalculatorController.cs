@@ -118,7 +118,7 @@ namespace CalculatorService.Server.Controllers
 
                 if (!string.IsNullOrWhiteSpace(trackingId))
                 {
-                    _journal.Save(trackingId, new JournalEntry("Square root", $"{request.number} √ = {result}"));
+                    _journal.Save(trackingId, new JournalEntry("Square root", $"√{request.number}  = {result}"));
                 }
                 return Ok(new SqrtResponse { result = result });
             }

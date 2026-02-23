@@ -1,331 +1,282 @@
 ﻿using CalculatorService.Client;
 using CalculatorService.Core.Models;
-using System.Runtime.CompilerServices;
 
-Console.WriteLine("calculator service client");
-
-var baseUrl = "http://localhost:5271";
-var client = new CalculatorApiClient(baseUrl);
-
-
-
-Console.WriteLine("Evicertia Console-Based Calculator");
-
-Console.WriteLine("");
-
-
-Console.WriteLine("Enter optional Tracking ID. Leave empty for no tracking id record");
-var trackingId = Console.ReadLine();
-Console.Clear();
-
-int selector;
-do
+namespace CalculatorService.ClientApp
 {
-    Console.WriteLine("Choose the operation you desire to perform:");
-    Console.WriteLine("###########################################");
-    Console.WriteLine();
-    Console.WriteLine("1. Addition");
-    Console.WriteLine("2. Subtraction");
-    Console.WriteLine("3. Multiplication");
-    Console.WriteLine("4. Division");
-    Console.WriteLine("5. Square root");
-    Console.WriteLine("0. Close calculator");
-    Console.WriteLine();
-    Console.WriteLine("############################################");
-
-    int.TryParse(Console.ReadLine(), out selector);
-
-
-    switch (selector)
+    internal class Program
     {
-        case 1:
-            await Add(client, trackingId);
-            break;
+        private static CalculatorApiClient _client = null!;
+        private static string? _trackingId;
 
-        case 2:
-            await Sub(client, trackingId);
-            break;
-
-        case 3:
-            await Mult(client, trackingId);
-            break;
-
-        case 4:
-            await Div(client, trackingId);
-            break;
-
-        case 5:
-            //TODO SQRT
-            break;
-
-        case 0:
-            Console.WriteLine("Closing calculator....");
-            break;
-    }
-} while (selector != 0);
-
-
-static async Task Sub(CalculatorApiClient client, string? trackingId) 
-{
-    Console.WriteLine("Enter the minuend: ");
-    var input = Console.ReadLine() ?? string.Empty;
-
-    double.TryParse(input, out var minuend);
-
-    Console.WriteLine("Enter the subtrahends separated by a white space:");
-    var inpSubtrahends = Console.ReadLine() ?? string.Empty;
-
-    var subtrahends = new List<double>();
-    foreach(var part in inpSubtrahends.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-    {
-        if (double.TryParse(part, out var n))
-            subtrahends.Add(n);
-        else
-            Console.WriteLine($"Warning: '{part}' is not a valid number and will be skipped.");
-    }
-
-    try
-    {
-        var result = await client.SubAsync(minuend, subtrahends, trackingId);
-
-        Console.WriteLine($"Result: {result.Result}");
-
-        if (!string.IsNullOrWhiteSpace(trackingId))
-            Console.WriteLine($"Tracking ID: {trackingId}");
-    } catch (Exception ex)
-    {
-        Console.WriteLine($"Error: {ex.Message}");
-    }
-}
-
-static async Task Sqrt(CalculatorApiClient client, string? trackingId)
-{
-    Console.WriteLine("Enter the number you want to know the square root of.");
-    var nInput = Console.ReadLine();
-
-    if (!double.TryParse(nInput, out var number))
-    {
-        Console.WriteLine("Please enter a valid input");
-        return;
-    }
-
-    try
-    {
-        var result = await client.SqrtAsync(number, trackingId);
-        Console.WriteLine($"Result: {result.result}");
-    } catch (Exception ex)
-    {
-        Console.WriteLine($"Error: {ex.Message}");
-    }
-
-
-}
-static async Task Div(CalculatorApiClient client, string? trackingId)
-{
-    Console.WriteLine("Enter the dividend: ");
-    var dvendInput = Console.ReadLine() ?? string.Empty;
-
-    Console.WriteLine("Enter the divisor: ");
-    var dvsorInput = Console.ReadLine() ?? string.Empty;
-
-    if (!double.TryParse(dvendInput, out var dividend))
-    {
-        Console.WriteLine("Invalid dividend. Please enter a valid number.");
-        return;
-    }
-
-    if (!double.TryParse(dvsorInput, out var divisor))
-    {
-        Console.WriteLine("Invalid divisor. Please enter a valid number.");
-        return;
-    }
-
-    if (divisor == 0)
-    {
-        Console.WriteLine("Divisor cannot be zero.");
-        return;
-    }
-
-    try
-    {
-        var result = await client.DivAsync(dividend, divisor, trackingId);
-
-        Console.WriteLine($"Quotient: {result.Quotient}");
-        Console.WriteLine($"Remainder: {result.Remainder}");
-
-        if (!string.IsNullOrWhiteSpace(trackingId))
-            Console.WriteLine($"Tracking ID: {trackingId}");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error: {ex.Message}");
-    }
-}
-
-
-
-static async Task Mult(CalculatorApiClient client, string? trackingId)
-{
-    Console.WriteLine("Enter all the numbers you want to multiply separated by a space");
-    var input = Console.ReadLine() ?? string.Empty;
-
-    var numbers = new List<double>();
-    foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-    {
-        if (double.TryParse(part, out var n))
-            numbers.Add(n);
-        else
-            Console.WriteLine($"Warning: '{part}' is not a valid number and will be skipped.");
-    }
-
-    try
-    {
-        var result = await client.MultAsync(numbers, trackingId);
-
-        Console.WriteLine($"Result: {result.Result}");
-
-        if (!string.IsNullOrWhiteSpace(trackingId))
-            Console.WriteLine($"Tracking ID: {trackingId}");
-    } catch (Exception ex)
-    {
-        Console.WriteLine($"Error: {ex.Message}");
-    }
-}
-
-
-//maybe we should remove async from this, just maybe
-static async Task Add(CalculatorApiClient client, string? trackingId)
-{
-    Console.WriteLine("Enter numbers to add separated by space:");
-    var input = Console.ReadLine() ?? string.Empty;
-
-    var numbers = new List<uint>();
-    foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-    {
-        if (uint.TryParse(part, out var n))
-            numbers.Add(n);
-        else
-            Console.WriteLine($"Warning: '{part}' is not a valid number and will be skipped.");
-    }
-
-
-    try
-    {
-        var result = await client.AddAsync(numbers, trackingId);
-
-        Console.WriteLine($"Result: {result.Sum}");
-
-        if (!string.IsNullOrWhiteSpace(trackingId))
-            Console.WriteLine($"Tracking ID: {trackingId}");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error: {ex.Message}");
-    }
-
-}
-
-
-
-
-
-
-
-Console.WriteLine("Do you want to see journal entries? Y/N");
-string answer = Console.ReadLine()?.Trim().ToLowerInvariant();
-
-if (answer == "y" || answer == "yes")
-{
-    string findTrackingId;
-    do
-    {
-        Console.Write("Enter the tracking ID you want to see the journal of: ");
-        findTrackingId = Console.ReadLine()?.Trim();
-
-        if (string.IsNullOrWhiteSpace(findTrackingId))
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Tracking ID cannot be empty. Please try again.");
+            Initialize();
+            await RunAsync();
+            await ShowJournalAsync();
+            Exit();
         }
-        
-    }
-    while (string.IsNullOrWhiteSpace(findTrackingId));
 
-    var journalEntries = await client.GetJournalAsync(findTrackingId);
+        // Initialization
 
-    if (!journalEntries.Any())
-    {
-        Console.WriteLine("No journal entries found for this Tracking ID.");
-    }
-    else
-    {
-        Console.WriteLine($"Journal entries for Tracking ID: {findTrackingId}");
-        foreach (var entry in journalEntries)
+        private static void Initialize()
         {
-            Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+            Console.WriteLine("Evicertia Console-Based Calculator\n");
+
+            var baseUrl = "http://localhost:5271";
+            _client = new CalculatorApiClient(baseUrl);
+
+            Console.WriteLine("Enter optional Tracking ID (leave empty for no tracking):");
+            _trackingId = Console.ReadLine();
+            Console.Clear();
         }
-    }
-}
-else
-{
-    Console.WriteLine("Okay, no journal entries will be shown.");
-}
 
-Console.WriteLine("Press any key to exit program");
-Console.ReadKey();
+        // Main Menu Loop
 
-
-
-//maybe a switch loop is not the best decision for this kind of user input choice but i can't think rn
-/*switch(answer)
-{
-    case "y":
-        //TODO
-        Console.WriteLine("Enter the journal's tracking id you want to see:");
-        var findTrackingId = Console.ReadLine();
-
-        //Console.WriteLine(client.GetJournalAsync(findTrackingId).ToString());
-
-
-        var journalEntries = await client.GetJournalAsync(findTrackingId);
-
-        if (!journalEntries.Any())
+        private static async Task RunAsync()
         {
-            Console.WriteLine("No journal entries found for this Tracking ID.");
-        }
-        else
-        {
-            Console.WriteLine($"Journal entries for Tracking ID: {findTrackingId}");
+            int selector;
 
-            foreach (var entry in journalEntries)
+            do
             {
-                Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+                DisplayMenu();
+                selector = ReadInt("Choose an operation: ");
+
+                switch (selector)
+                {
+                    case 1: await AddAsync(); break;
+                    case 2: await SubAsync(); break;
+                    case 3: await MultAsync(); break;
+                    case 4: await DivAsync(); break;
+                    case 5: await SqrtAsync(); break;
+                    case 0: Console.WriteLine("Closing calculator..."); break;
+                    default: Console.WriteLine("Invalid option."); break;
+                }
+
+            } while (selector != 0);
+        }
+
+        private static void DisplayMenu()
+        {
+            Console.WriteLine("\n###########################################");
+            Console.WriteLine("1. Addition");
+            Console.WriteLine("2. Subtraction");
+            Console.WriteLine("3. Multiplication");
+            Console.WriteLine("4. Division");
+            Console.WriteLine("5. Square root");
+            Console.WriteLine("0. Close calculator");
+            Console.WriteLine("###########################################\n");
+        }
+
+        // Operations
+      
+
+        private static async Task AddAsync()
+        {
+            var numbers = ReadUIntList("Enter numbers to add separated by space: ");
+
+            if (numbers.Count < 2)
+            {
+                Console.WriteLine("At least two numbers are required.");
+                return;
+            }
+
+            try
+            {
+                var result = await _client.AddAsync(numbers, _trackingId);
+                Console.WriteLine($"Result: {result.Sum}");
+                PrintTracking();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
-        break;
+        private static async Task SubAsync()
+        {
+            var minuend = ReadDouble("Enter the minuend: ");
+            var subtrahends = ReadDoubleList("Enter subtrahends separated by space: ");
 
-    case "n":
-        //TODO
-        System.Environment.Exit(1);
-        break;
+            if (!subtrahends.Any())
+            {
+                Console.WriteLine("At least one subtrahend required.");
+                return;
+            }
 
-    default:
-        //loop over until user puts the right input
-        break;
-}*/
+            try
+            {
+                var result = await _client.SubAsync(minuend, subtrahends, _trackingId);
+                Console.WriteLine($"Result: {result.Result}");
+                PrintTracking();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
 
+        private static async Task MultAsync()
+        {
+            var numbers = ReadDoubleList("Enter numbers to multiply separated by space: ");
 
+            if (numbers.Count < 2)
+            {
+                Console.WriteLine("At least two numbers required.");
+                return;
+            }
 
+            try
+            {
+                var result = await _client.MultAsync(numbers, _trackingId);
+                Console.WriteLine($"Result: {result.Result}");
+                PrintTracking();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
 
+        private static async Task DivAsync()
+        {
+            var dividend = ReadDouble("Enter dividend: ");
 
-/*try
-{
-    answer = Console.ReadLine();
+            double divisor;
+            do
+            {
+                divisor = ReadDouble("Enter divisor: ");
+                if (divisor == 0)
+                    Console.WriteLine("Divisor cannot be zero.");
+            } while (divisor == 0);
 
-} catch (Exception ex)
-{
-    Console.WriteLine("Debes responder solamente con  'y'  o con 'n' ");
-}*/
+            try
+            {
+                var result = await _client.DivAsync(dividend, divisor, _trackingId);
+                Console.WriteLine($"Quotient: {result.Quotient}");
+                Console.WriteLine($"Remainder: {result.Remainder}");
+                PrintTracking();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
 
+        private static async Task SqrtAsync()
+        {
+            var number = ReadDouble("Enter number for square root: ");
 
+            if (number < 0)
+            {
+                Console.WriteLine("Cannot calculate square root of negative number.");
+                return;
+            }
 
+            try
+            {
+                var result = await _client.SqrtAsync(number, _trackingId);
+                Console.WriteLine($"Result: {result.result}");
+                PrintTracking();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        // Journal
+
+        private static async Task ShowJournalAsync()
+        {
+            Console.WriteLine("\nDo you want to see journal entries? (Y/N)");
+            var answer = Console.ReadLine()?.Trim().ToLowerInvariant();
+
+            if (answer != "y" && answer != "yes")
+                return;
+
+            string trackingId;
+            do
+            {
+                Console.Write("Enter tracking ID: ");
+                trackingId = Console.ReadLine() ?? "";
+            }
+            while (string.IsNullOrWhiteSpace(trackingId));
+
+            try
+            {
+                var entries = await _client.GetJournalAsync(trackingId);
+
+                if (!entries.Any())
+                {
+                    Console.WriteLine("No journal entries found.");
+                    return;
+                }
+
+                Console.WriteLine($"\nJournal entries for {trackingId}:");
+
+                foreach (var entry in entries)
+                {
+                    Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        // Helpers
+
+        private static int ReadInt(string prompt)
+        {
+            Console.Write(prompt);
+            return int.TryParse(Console.ReadLine(), out var value) ? value : -1;
+        }
+
+        private static double ReadDouble(string prompt)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                if (double.TryParse(Console.ReadLine(), out var number))
+                    return number;
+
+                Console.WriteLine("Invalid number. Try again.");
+            }
+        }
+
+        private static List<double> ReadDoubleList(string prompt)
+        {
+            Console.Write(prompt);
+            var input = Console.ReadLine() ?? "";
+
+            return input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                        .Where(x => double.TryParse(x, out _))
+                        .Select(double.Parse)
+                        .ToList();
+        }
+
+        private static List<uint> ReadUIntList(string prompt)
+        {
+            Console.Write(prompt);
+            var input = Console.ReadLine() ?? "";
+
+            return input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                        .Where(x => uint.TryParse(x, out _))
+                        .Select(uint.Parse)
+                        .ToList();
+        }
+
+        private static void PrintTracking()
+        {
+            if (!string.IsNullOrWhiteSpace(_trackingId))
+                Console.WriteLine($"Tracking ID: {_trackingId}");
+        }
+
+        private static void Exit()
+        {
+            Console.WriteLine("\nPress any key to exit.");
+            Console.ReadKey();
+        }
+    }
+}

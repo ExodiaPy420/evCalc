@@ -98,6 +98,37 @@
         }
       }
     },
+    "/calculator/sqrt": {
+      "post": {
+        "tags": [
+          "Calculator"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SqrtRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SqrtRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SqrtRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/calculator/add": {
       "post": {
         "tags": [
@@ -250,6 +281,16 @@
               "format": "double"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SqrtRequest": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
