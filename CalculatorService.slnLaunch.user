@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "CalculatorService.Client\\CalculatorService.Client.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "CalculatorService.Server\\CalculatorService.Server.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
