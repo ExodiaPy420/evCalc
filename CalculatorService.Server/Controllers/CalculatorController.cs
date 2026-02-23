@@ -53,6 +53,32 @@ namespace CalculatorService.Server.Controllers
 
 
 
+        [HttpPost("mult")]
+        public IActionResult Mult([FromBody] MultRequest request)
+        {
+            if (request?.Factors == null || request.Factors.Count() < 2)
+                return BadRequest(new { ErrorMessage = "At least two factors are required." });
+
+            try
+            {
+                double result = _calculator.Multiply(request.Factors);
+                string trackingId = Request.Headers["X-Evi-Tracking-Id"];
+
+                if (!string.IsNullOrWhiteSpace(trackingId))
+                {
+                    _journal.Save(trackingId, new JournalEntry("Multiply", $"{string.Join(" * ", request.Factors)} = {result}"));
+                }
+
+                return Ok(new MultResponse { Result = result });
+            } catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message });
+            }
+        }
+
+
+
+
 
 
         [HttpPost("add")]
