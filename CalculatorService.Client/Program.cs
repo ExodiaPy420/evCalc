@@ -51,7 +51,7 @@ do
             break;
 
         case 4:
-            //TODO DIV
+            await Div(client, trackingId);
             break;
 
         case 5:
@@ -93,6 +93,49 @@ static async Task Sub(CalculatorApiClient client, string? trackingId)
         if (!string.IsNullOrWhiteSpace(trackingId))
             Console.WriteLine($"Tracking ID: {trackingId}");
     } catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
+
+
+static async Task Div(CalculatorApiClient client, string? trackingId)
+{
+    Console.WriteLine("Enter the dividend: ");
+    var dvendInput = Console.ReadLine() ?? string.Empty;
+
+    Console.WriteLine("Enter the divisor: ");
+    var dvsorInput = Console.ReadLine() ?? string.Empty;
+
+    if (!double.TryParse(dvendInput, out var dividend))
+    {
+        Console.WriteLine("Invalid dividend. Please enter a valid number.");
+        return;
+    }
+
+    if (!double.TryParse(dvsorInput, out var divisor))
+    {
+        Console.WriteLine("Invalid divisor. Please enter a valid number.");
+        return;
+    }
+
+    if (divisor == 0)
+    {
+        Console.WriteLine("Divisor cannot be zero.");
+        return;
+    }
+
+    try
+    {
+        var result = await client.DivAsync(dividend, divisor, trackingId);
+
+        Console.WriteLine($"Quotient: {result.Quotient}");
+        Console.WriteLine($"Remainder: {result.Remainder}");
+
+        if (!string.IsNullOrWhiteSpace(trackingId))
+            Console.WriteLine($"Tracking ID: {trackingId}");
+    }
+    catch (Exception ex)
     {
         Console.WriteLine($"Error: {ex.Message}");
     }
