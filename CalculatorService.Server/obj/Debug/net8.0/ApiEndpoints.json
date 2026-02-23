@@ -16,6 +16,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "CalculatorService.Server.Controllers.CalculatorController",
+    "Method": "Sub",
+    "RelativePath": "calculator/sub",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CalculatorService.Core.Models.SubRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "CalculatorService.Server.Controllers.JournalController",
     "Method": "Query",
     "RelativePath": "journal/query",

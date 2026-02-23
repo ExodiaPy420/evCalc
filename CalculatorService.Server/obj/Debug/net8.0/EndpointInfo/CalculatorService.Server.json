@@ -5,6 +5,37 @@
     "version": "1.0"
   },
   "paths": {
+    "/calculator/sub": {
+      "post": {
+        "tags": [
+          "Calculator"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/calculator/add": {
       "post": {
         "tags": [
@@ -128,6 +159,24 @@
         "properties": {
           "id": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubRequest": {
+        "type": "object",
+        "properties": {
+          "minuend": {
+            "type": "number",
+            "format": "double"
+          },
+          "subtrahends": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "double"
+            },
             "nullable": true
           }
         },

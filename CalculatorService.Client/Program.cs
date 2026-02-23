@@ -43,7 +43,7 @@ do
             break;
 
         case 2:
-            //TODO SUB
+            await Sub(client, trackingId);
             break;
 
         case 3:
@@ -65,7 +65,36 @@ do
 } while (selector != 0);
 
 
+static async Task Sub(CalculatorApiClient client, string? trackingId) 
+{
+    Console.WriteLine("Enter the minuend: ");
+    var input = Console.ReadLine() ?? string.Empty;
 
+    double.TryParse(input, out var minuend);
+
+    Console.WriteLine("Enter the subtrahends separated by a white space:");
+    var inpSubtrahends = Console.ReadLine() ?? string.Empty;
+
+    var subtrahends = new List<double>();
+    foreach(var part in inpSubtrahends.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+    {
+        if (double.TryParse(part, out var n))
+            subtrahends.Add(n);
+    }
+
+    try
+    {
+        var result = await client.SubAsync(minuend, subtrahends, trackingId);
+
+        Console.WriteLine($"Result: {result.Result}");
+
+        if (!string.IsNullOrWhiteSpace(trackingId))
+            Console.WriteLine($"Tracking ID: {trackingId}");
+    } catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
 
 
 //maybe we should remove async from this, just maybe

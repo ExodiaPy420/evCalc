@@ -18,6 +18,43 @@ namespace CalculatorService.Server.Controllers
             _journal = journal;
         }
 
+
+
+
+
+        [HttpPost("sub")]
+        public IActionResult Sub([FromBody] SubRequest request)
+        {
+            if (request == null || request.Subtrahends == null || !request.Subtrahends.Any())
+                return BadRequest(new { ErrorMessage = "At least one subtrahend is required." });
+
+            try
+            {
+                double result = _calculator.Subtract(request.Minuend, request.Subtrahends);
+                string trackingId = Request.Headers["X-Evi-Tracking-Id"];
+
+                /*if (!string.IsNullOrWhiteSpace(trackingId))
+                {
+                    _journal.Save(trackingId, new JournalEntry("Subtract", $"{string.Join(" + ", request.Minuend, request.Subtrahends)} = {result}"));
+
+
+                }*/
+                if (!string.IsNullOrWhiteSpace(trackingId))
+                {
+                    var calculationString = request.Minuend + " - " + string.Join(" - ", request.Subtrahends);
+                    _journal.Save(trackingId, new JournalEntry("Subtract", $"{calculationString} = {result}"));
+                }
+                return Ok(new SubResponse { Result = result });
+            } catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message}); 
+            }
+        }
+
+
+
+
+
         [HttpPost("add")]
         public IActionResult Add([FromBody] AddRequest request)
         {
