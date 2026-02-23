@@ -98,7 +98,28 @@ static async Task Sub(CalculatorApiClient client, string? trackingId)
     }
 }
 
+static async Task Sqrt(CalculatorApiClient client, string? trackingId)
+{
+    Console.WriteLine("Enter the number you want to know the square root of.");
+    var nInput = Console.ReadLine();
 
+    if (!double.TryParse(nInput, out var number))
+    {
+        Console.WriteLine("Please enter a valid input");
+        return;
+    }
+
+    try
+    {
+        var result = await client.SqrtAsync(number, trackingId);
+        Console.WriteLine($"Result: {result.result}");
+    } catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+
+
+}
 static async Task Div(CalculatorApiClient client, string? trackingId)
 {
     Console.WriteLine("Enter the dividend: ");
