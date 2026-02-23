@@ -61,6 +61,29 @@ namespace CalculatorService.Client
             return await response.Content.ReadFromJsonAsync<DivResponse>();
         }
 
+        public async Task<SqrtResponse> SqrtAsync(double number, string trackingId = null)
+        {
+            var request = new SqrtRequest { number = number };
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/sqrt")
+            {
+                Content = JsonContent.Create(request)
+            };
+
+            if (!string.IsNullOrWhiteSpace(trackingId))
+                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+
+            var response = await _httpClient.SendAsync(httpRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception($"API Error: {response.StatusCode} - {error}");
+            }
+
+            return await response.Content.ReadFromJsonAsync<SqrtResponse>();
+        }
+
         public async Task<MultResponse> MultAsync(IEnumerable<double> factors, string trackingId = null)
         {
             var request = new MultRequest { Factors = factors };
