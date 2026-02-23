@@ -1,27 +1,21 @@
 using CalculatorService.Core.Interfaces;
 using CalculatorService.Core.Services;
-
-
+using CalculatorService.Server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-
-
 builder.Services.AddScoped<ICalculatorOperations, CalculatorOperations>();
 builder.Services.AddSingleton<IJournalService, JournalService>();
-builder.Services.AddControllers(); //.AddJsonOptions(options => { options.JsonSerializerOptions.WriteIndented = false; });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 
 /*app.UseHttpsRedirection();*/
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,7 +23,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

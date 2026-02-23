@@ -1,4 +1,5 @@
 ﻿using CalculatorService.Core.Interfaces;
+using CalculatorService.Core.Exceptions;
 
 namespace CalculatorService.Core.Services
 {
@@ -10,7 +11,7 @@ namespace CalculatorService.Core.Services
         public uint Add(IEnumerable<uint> addends)
         {
             if (addends == null || addends.Take(2).Count() < 2) //addends.Take(2).Count() < 2???????????
-                throw new ArgumentException("At least two operands are required.");
+                throw new InvalidArgumentsException("At least two operands are required.");
 
             // the below workaround on uints not being allowed to perform LINQ operations
             // is the one proposed by AI, i'm still looking into it to see if it really is best
@@ -45,7 +46,7 @@ namespace CalculatorService.Core.Services
         public double Subtract(double minuend, IEnumerable<double> subtrahends) 
         {
             if (minuend == null || subtrahends.Count() < 1)
-                throw new ArgumentException("At least two operands are required.");
+                throw new InvalidArgumentsException("At least two operands are required.");
 
             double result = minuend;
 
@@ -68,7 +69,7 @@ namespace CalculatorService.Core.Services
         public double Multiply(IEnumerable<double> factors) 
         {
             if (factors == null || factors.Count() < 2)
-                throw new ArgumentException("At least two operands are required.");
+                throw new InvalidArgumentsException("At least two operands are required.");
 
             return factors.Aggregate(1.0, (acc, x) => acc * x);
 
@@ -78,7 +79,7 @@ namespace CalculatorService.Core.Services
 
         public (double Quotient, double Remainder) Divide(double dividend, double divisor)
         {
-            if (divisor == 0) throw new DivideByZeroException("Can't divide by zero.");
+            if (divisor == 0) throw new DivisionByZeroException();
 
 
 
@@ -91,7 +92,7 @@ namespace CalculatorService.Core.Services
 
         public double Sqrt(double number)
         {
-            if (number < 0) throw new ArgumentException("cannot calculate square root of a negative number.");
+            if (number < 0) throw new InvalidArgumentsException("cannot calculate square root of a negative number.");
             return Math.Sqrt(number);
         }
 
