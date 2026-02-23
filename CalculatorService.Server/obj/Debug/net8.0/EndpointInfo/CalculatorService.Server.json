@@ -67,6 +67,37 @@
         }
       }
     },
+    "/calculator/div": {
+      "post": {
+        "tags": [
+          "Calculator"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DivRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DivRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DivRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/calculator/add": {
       "post": {
         "tags": [
@@ -181,6 +212,20 @@
               "format": "int32"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DivRequest": {
+        "type": "object",
+        "properties": {
+          "dividend": {
+            "type": "number",
+            "format": "double"
+          },
+          "divisor": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
