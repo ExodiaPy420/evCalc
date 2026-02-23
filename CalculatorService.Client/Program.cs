@@ -47,7 +47,7 @@ do
             break;
 
         case 3:
-            //TODO MULT
+            await Mult(client, trackingId);
             break;
 
         case 4:
@@ -85,6 +85,34 @@ static async Task Sub(CalculatorApiClient client, string? trackingId)
     try
     {
         var result = await client.SubAsync(minuend, subtrahends, trackingId);
+
+        Console.WriteLine($"Result: {result.Result}");
+
+        if (!string.IsNullOrWhiteSpace(trackingId))
+            Console.WriteLine($"Tracking ID: {trackingId}");
+    } catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+}
+
+
+
+static async Task Mult(CalculatorApiClient client, string? trackingId)
+{
+    Console.WriteLine("Enter all the numbers you want to multiply separated by a space");
+    var input = Console.ReadLine() ?? string.Empty;
+
+    var numbers = new List<double>();
+    foreach (var part in input.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+    {
+        if (double.TryParse(part, out var n))
+            numbers.Add(n);
+    }
+
+    try
+    {
+        var result = await client.MultAsync(numbers, trackingId);
 
         Console.WriteLine($"Result: {result.Result}");
 
