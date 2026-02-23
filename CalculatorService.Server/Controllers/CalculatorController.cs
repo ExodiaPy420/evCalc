@@ -77,6 +77,31 @@ namespace CalculatorService.Server.Controllers
         }
 
 
+        [HttpPost("div")]
+        public IActionResult Div([FromBody] DivRequest request) 
+        {
+            if (request?.Dividend == null || request.Divisor == null)
+                return BadRequest(new { ErrorMessage = "Both dividend and divisor must be input." });
+
+            try
+            {
+                var (quotient, remainder) = _calculator.Divide(request.Dividend, request.Divisor);
+
+                string trackingId = Request.Headers["X-Evi-Tracking-Id"];
+
+                if (!string.IsNullOrWhiteSpace(trackingId))
+                {
+                    _journal.Save(trackingId, new JournalEntry("Divide", $"{request.Dividend} ÷ {request.Divisor} = {quotient}, remainder {remainder}"));
+                }
+
+                return Ok(new DivResponse { Quotient = quotient, Remainder = remainder });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message });
+            }
+        }
+
 
 
 
