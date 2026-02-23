@@ -32,12 +32,25 @@ namespace CalculatorService.Server.Controllers
 
                 if(!string.IsNullOrWhiteSpace(trackingId))
                 {
-                    _journal.Save(trackingId, new JournalEntry
+
+                    _journal.Save(
+                        trackingId,
+                        new JournalEntry(
+                            "Add",
+                            $"{string.Join(" + ", request.Addends)} = {sum}"
+                        )
+                    );
+
+
+
+
+                    /*_journal.Save(trackingId, new JournalEntry
                     {
                         Operation = "Add",
                         Calculation = string.Join(" + ", request.Addends) + " = " + sum,
                         Date = DateTime.UtcNow
-                    });
+                    });*/
+
                 }
 
                 return Ok(new AddResponse { Sum = sum });

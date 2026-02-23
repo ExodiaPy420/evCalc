@@ -9,7 +9,7 @@ namespace CalculatorService.Core.Services
 
         public uint Add(IEnumerable<uint> addends)
         {
-            if (addends == null || addends.Count() < 2) //addends.Take(2).Count() < 2???????????
+            if (addends == null || addends.Take(2).Count() < 2) //addends.Take(2).Count() < 2???????????
                 throw new ArgumentException("At least two operands are required.");
 
             // the below workaround on uints not being allowed to perform LINQ operations
