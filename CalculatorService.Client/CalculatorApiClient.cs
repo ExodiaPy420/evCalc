@@ -37,6 +37,30 @@ namespace CalculatorService.Client
             return await response.Content.ReadFromJsonAsync<AddResponse>();
         }
 
+
+        public async Task<MultResponse> MultAsync(IEnumerable<double> factors, string trackingId = null)
+        {
+            var request = new MultRequest { Factors = factors };
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/mult")
+            {
+                Content = JsonContent.Create(request)
+            };
+
+            if (!string.IsNullOrWhiteSpace(trackingId))
+                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+
+            var response = await _httpClient.SendAsync(httpRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception($"API Error: {response.StatusCode} - {error}");
+            }
+
+            return await response.Content.ReadFromJsonAsync<MultResponse>();
+        }
+
         public async Task<SubResponse> SubAsync(double minuend, IEnumerable<double> subtrahends, string trackingId = null)
         {
             var request = new SubRequest { Minuend = minuend, Subtrahends = subtrahends };

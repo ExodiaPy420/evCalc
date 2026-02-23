@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class MultRequest
     {
-        public IEnumerable<uint> Factors { get; set; }
+        public IEnumerable<double> Factors { get; set; }
     }
 }
