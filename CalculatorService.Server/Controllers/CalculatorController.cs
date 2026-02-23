@@ -104,6 +104,32 @@ namespace CalculatorService.Server.Controllers
 
 
 
+        [HttpPost("sqrt")]
+        public IActionResult Sqrt([FromBody] SqrtRequest request)
+        {
+            if (request?.number == null)
+                return BadRequest(new { ErrorMessage = "The square root input cannot be empty." });
+
+            try
+            {
+                var result = _calculator.Sqrt(request.number);
+
+                string trackingId = Request.Headers["X-Evi-Tracking-Id"];
+
+                if (!string.IsNullOrWhiteSpace(trackingId))
+                {
+                    _journal.Save(trackingId, new JournalEntry("Square root", $"{request.number} √ = {result}"));
+                }
+                return Ok(new SqrtResponse { result = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorMessage = ex.Message });
+            }
+        }
+
+
+
 
 
         [HttpPost("add")]
