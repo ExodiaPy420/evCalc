@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CalculatorService.Server.Controllers
 {
+    [ApiController]
     [Route("journal")]
     public class JournalController : ControllerBase
     {
@@ -22,19 +23,12 @@ namespace CalculatorService.Server.Controllers
         public IActionResult Query([FromBody] JournalQueryRequest request)
         {
             if (string.IsNullOrWhiteSpace(request?.Id))
-                return BadRequest(new { ErrorMessage = "Tracking ID is required." });
+                return BadRequest(new { ErrorCode = "InvalidArguments", ErrorStatus = 400, ErrorMessage = "Tracking ID is required." });
 
-            try
-            {
-                var entries = _journal.GetOperations(request.Id);
-                return Ok(new { Operations = entries });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { ErrorMessage = ex.Message });
-            }
+            var entries = _journal.GetOperations(request.Id);
+            return Ok(new { Operations = entries });
         }
 
-        
+
     }
 }

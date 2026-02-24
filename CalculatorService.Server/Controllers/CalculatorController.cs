@@ -21,19 +21,18 @@ namespace CalculatorService.Server.Controllers
         [HttpPost("sub")]
         public IActionResult Sub([FromBody] SubRequest request)
         {
-            if (request == null || request.Subtrahends == null || !request.Subtrahends.Any())
-                throw new InvalidArgumentsException("At least a number is required.");
+            if (request == null)
+                throw new InvalidArgumentsException("Both minuend and subtrahend are required.");
 
-            double result = _calculator.Subtract(request.Minuend, request.Subtrahends);
+            double result = _calculator.Subtract(request.Minuend, request.Subtrahend);
 
             string trackingId = Request.Headers["X-Evi-Tracking-Id"];
             if (!string.IsNullOrWhiteSpace(trackingId))
             {
-                var calculationString = request.Minuend + " - " + string.Join(" - ", request.Subtrahends);
-                _journal.Save(trackingId, new JournalEntry("Subtract", $"{calculationString} = {result}"));
+                _journal.Save(trackingId, new JournalEntry("Sub", $"{request.Minuend} - {request.Subtrahend} = {result}"));
             }
 
-            return Ok(new SubResponse { Result = result });
+            return Ok(new SubResponse { Difference = result });
         }
 
         [HttpPost("mult")]
@@ -47,24 +46,24 @@ namespace CalculatorService.Server.Controllers
             string trackingId = Request.Headers["X-Evi-Tracking-Id"];
             if (!string.IsNullOrWhiteSpace(trackingId))
             {
-                _journal.Save(trackingId, new JournalEntry("Multiply", $"{string.Join(" * ", request.Factors)} = {result}"));
+                _journal.Save(trackingId, new JournalEntry("Mul", $"{string.Join(" * ", request.Factors)} = {result}"));
             }
 
-            return Ok(new MultResponse { Result = result });
+            return Ok(new MultResponse { Product = result });
         }
 
         [HttpPost("div")]
         public IActionResult Div([FromBody] DivRequest request)
         {
-            if (request?.Dividend == null || request.Divisor == null)
-                throw new InvalidArgumentsException("Both dividend and divisor must be implemented.");
+            if (request == null)
+                throw new InvalidArgumentsException("Both dividend and divisor are required.");
 
             var (quotient, remainder) = _calculator.Divide(request.Dividend, request.Divisor);
 
             string trackingId = Request.Headers["X-Evi-Tracking-Id"];
             if (!string.IsNullOrWhiteSpace(trackingId))
             {
-                _journal.Save(trackingId, new JournalEntry("Divide", $"{request.Dividend} ÷ {request.Divisor} = {quotient}, remainder {remainder}"));
+                _journal.Save(trackingId, new JournalEntry("Div", $"{request.Dividend} / {request.Divisor} = {quotient} remainder {remainder}"));
             }
 
             return Ok(new DivResponse { Quotient = quotient, Remainder = remainder });
@@ -73,18 +72,18 @@ namespace CalculatorService.Server.Controllers
         [HttpPost("sqrt")]
         public IActionResult Sqrt([FromBody] SqrtRequest request)
         {
-            if (request?.number == null)
-                throw new InvalidArgumentsException("The square root input cannot be empty.");
+            if (request == null)
+                throw new InvalidArgumentsException("A number is required.");
 
-            var result = _calculator.Sqrt(request.number);
+            var result = _calculator.Sqrt(request.Number);
 
             string trackingId = Request.Headers["X-Evi-Tracking-Id"];
             if (!string.IsNullOrWhiteSpace(trackingId))
             {
-                _journal.Save(trackingId, new JournalEntry("Square root", $"√{request.number} = {result}"));
+                _journal.Save(trackingId, new JournalEntry("Sqrt", $"√{request.Number} = {result}"));
             }
 
-            return Ok(new SqrtResponse { result = result });
+            return Ok(new SqrtResponse { Square = result });
         }
 
         [HttpPost("add")]
@@ -93,12 +92,12 @@ namespace CalculatorService.Server.Controllers
             if (request?.Addends == null || request.Addends.Count() < 2)
                 throw new InvalidArgumentsException("At least two addends are required.");
 
-            uint sum = _calculator.Add(request.Addends);
+            double sum = _calculator.Add(request.Addends);
 
             string trackingId = Request.Headers["X-Evi-Tracking-Id"];
             if (!string.IsNullOrWhiteSpace(trackingId))
             {
-                _journal.Save(trackingId, new JournalEntry("Add", $"{string.Join(" + ", request.Addends)} = {sum}"));
+                _journal.Save(trackingId, new JournalEntry("Sum", $"{string.Join(" + ", request.Addends)} = {sum}"));
             }
 
             return Ok(new AddResponse { Sum = sum });

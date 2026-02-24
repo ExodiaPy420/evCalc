@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class SqrtRequest
     {
-        public double number { get; set; }
+        public double Number { get; set; }
     }
 }

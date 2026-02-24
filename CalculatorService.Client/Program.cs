@@ -20,7 +20,7 @@ namespace CalculatorService.ClientApp
 
         private static void Initialize()
         {
-            Console.WriteLine("Evicertia Console-Based Calculator\n");
+            Console.WriteLine("Evicertia Console-Based Calculator");
 
             var baseUrl = "http://localhost:5271";
             _client = new CalculatorApiClient(baseUrl);
@@ -72,7 +72,7 @@ namespace CalculatorService.ClientApp
 
         private static async Task AddAsync()
         {
-            var numbers = ReadUIntList("Enter numbers to add separated by space: ");
+            var numbers = ReadDoubleList("Enter numbers to add separated by space: ");
 
             if (numbers.Count < 2)
             {
@@ -95,18 +95,12 @@ namespace CalculatorService.ClientApp
         private static async Task SubAsync()
         {
             var minuend = ReadDouble("Enter the minuend: ");
-            var subtrahends = ReadDoubleList("Enter subtrahends separated by space: ");
-
-            if (!subtrahends.Any())
-            {
-                Console.WriteLine("At least one subtrahend required.");
-                return;
-            }
+            var subtrahend = ReadDouble("Enter the subtrahend: ");
 
             try
             {
-                var result = await _client.SubAsync(minuend, subtrahends, _trackingId);
-                Console.WriteLine($"Result: {result.Result}");
+                var result = await _client.SubAsync(minuend, subtrahend, _trackingId);
+                Console.WriteLine($"Result: {result.Difference}");
                 PrintTracking();
             }
             catch (Exception ex)
@@ -128,7 +122,7 @@ namespace CalculatorService.ClientApp
             try
             {
                 var result = await _client.MultAsync(numbers, _trackingId);
-                Console.WriteLine($"Result: {result.Result}");
+                Console.WriteLine($"Result: {result.Product}");
                 PrintTracking();
             }
             catch (Exception ex)
@@ -175,7 +169,7 @@ namespace CalculatorService.ClientApp
             try
             {
                 var result = await _client.SqrtAsync(number, _trackingId);
-                Console.WriteLine($"Result: {result.result}");
+                Console.WriteLine($"Result: {result.Square}");
                 PrintTracking();
             }
             catch (Exception ex)
@@ -253,17 +247,6 @@ namespace CalculatorService.ClientApp
             return input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                         .Where(x => double.TryParse(x, out _))
                         .Select(double.Parse)
-                        .ToList();
-        }
-
-        private static List<uint> ReadUIntList(string prompt)
-        {
-            Console.Write(prompt);
-            var input = Console.ReadLine() ?? "";
-
-            return input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                        .Where(x => uint.TryParse(x, out _))
-                        .Select(uint.Parse)
                         .ToList();
         }
 

@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class SubResponse
     {
-        public double Result { get; set; }
+        public double Difference { get; set; }
     }
 }

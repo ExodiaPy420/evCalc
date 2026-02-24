@@ -16,19 +16,8 @@ namespace CalculatorService.Core.Services
         {
 
             if (string.IsNullOrWhiteSpace(trackingId)) return;
-            //_journal.AddOrUpdate(trackingId, new List<JournalEntry> { entry , (key, existingList) => { lock (existingList)}) idk what i was even trying
-
 
             _journal.GetOrAdd(trackingId, _ => new ConcurrentQueue<JournalEntry>()).Enqueue(entry);
-            //_journal.AddOrUpdate(trackingId, new List<JournalEntry> { entry }, (key, existingList) =>
-            /*{
-                lock (existingList)
-                {
-                    existingList.GetOrAdd(key, _ => new ConcurrentQueue<JournalEntry>()).Enqueue(entry);
-                }
-                return existingList;
-            }
-        );*/
 
         }
 

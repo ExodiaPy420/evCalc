@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class AddRequest
     {
-        public IEnumerable<uint> Addends { get; set; }
+        public IEnumerable<double> Addends { get; set; }
     }
 }

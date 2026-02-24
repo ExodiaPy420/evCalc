@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class MultResponse
     {
-        public double Result { get; set; }
+        public double Product { get; set; }
     }
 }

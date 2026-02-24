@@ -12,9 +12,12 @@ namespace CalculatorService.Client
         public CalculatorApiClient(string baseUrl)
         {
             _httpClient = new HttpClient
-            { BaseAddress = new Uri(baseUrl) };
+            {
+                BaseAddress = new Uri(baseUrl),
+                Timeout = TimeSpan.FromSeconds(5)
+            };
         }
-        public async Task<AddResponse> AddAsync(IEnumerable<uint> addends, string trackingId = null)
+        public async Task<AddResponse> AddAsync(IEnumerable<double> addends, string trackingId = null)
         {
             var request = new AddRequest { Addends = addends };
 
@@ -63,7 +66,7 @@ namespace CalculatorService.Client
 
         public async Task<SqrtResponse> SqrtAsync(double number, string trackingId = null)
         {
-            var request = new SqrtRequest { number = number };
+            var request = new SqrtRequest { Number = number };
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/sqrt")
             {
@@ -107,9 +110,9 @@ namespace CalculatorService.Client
             return await response.Content.ReadFromJsonAsync<MultResponse>();
         }
 
-        public async Task<SubResponse> SubAsync(double minuend, IEnumerable<double> subtrahends, string trackingId = null)
+        public async Task<SubResponse> SubAsync(double minuend, double subtrahend, string trackingId = null)
         {
-            var request = new SubRequest { Minuend = minuend, Subtrahends = subtrahends };
+            var request = new SubRequest { Minuend = minuend, Subtrahend = subtrahend };
 
             var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/sub")
             {

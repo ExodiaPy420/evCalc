@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class AddResponse
     {
-        public uint Sum { get; set; }
+        public double Sum { get; set; }
     }
 }

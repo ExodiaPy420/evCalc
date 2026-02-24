@@ -8,6 +8,6 @@ namespace CalculatorService.Core.Models
 {
     public class SqrtResponse
     {
-        public double result { get; set; }
+        public double Square { get; set; }
     }
 }
