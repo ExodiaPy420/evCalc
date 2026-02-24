@@ -57,7 +57,7 @@ namespace CalculatorService.ClientApp
 
         private static void DisplayMenu()
         {
-            Console.WriteLine("\n###########################################");
+            Console.WriteLine("###########################################");
             Console.WriteLine("1. Addition");
             Console.WriteLine("2. Subtraction");
             Console.WriteLine("3. Multiplication");
@@ -65,7 +65,7 @@ namespace CalculatorService.ClientApp
             Console.WriteLine("5. Square root");
             Console.WriteLine("6. View calculation history");
             Console.WriteLine("0. Close calculator");
-            Console.WriteLine("###########################################\n");
+            Console.WriteLine("###########################################");
         }
 
         // Operations
@@ -199,7 +199,7 @@ namespace CalculatorService.ClientApp
                     return;
                 }
 
-                Console.WriteLine($"\nCalculation history for {_trackingId}:");
+                Console.WriteLine($"Calculation history for {_trackingId}:");
 
                 foreach (var entry in entries)
                 {
@@ -252,7 +252,7 @@ namespace CalculatorService.ClientApp
         private static void Exit()
         {
             _client.Dispose();
-            Console.WriteLine("\nPress any key to exit.");
+            Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
         }
     }
