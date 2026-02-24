@@ -1,4 +1,5 @@
 ﻿using CalculatorService.Core.Interfaces;
+using CalculatorService.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CalculatorService.Server.Controllers
@@ -8,15 +9,12 @@ namespace CalculatorService.Server.Controllers
     public class JournalController : ControllerBase
     {
         private readonly IJournalService _journal;
+        private readonly ILogger<JournalController> _logger;
 
-        public JournalController(IJournalService journal)
+        public JournalController(IJournalService journal, ILogger<JournalController> logger)
         {
             _journal = journal;
-        }
-
-        public class JournalQueryRequest
-        {
-            public string Id { get; set; } = string.Empty;
+            _logger = logger;
         }
 
         [HttpPost("query")]
@@ -25,8 +23,12 @@ namespace CalculatorService.Server.Controllers
             if (string.IsNullOrWhiteSpace(request?.Id))
                 return BadRequest(new { ErrorCode = "InvalidArguments", ErrorStatus = 400, ErrorMessage = "Tracking ID is required." });
 
+            _logger.LogInformation("Journal query for tracking ID {TrackingId}", request.Id);
+
             var entries = _journal.GetOperations(request.Id);
-            return Ok(new { Operations = entries });
+
+            _logger.LogInformation("Journal query returned {Count} entries for {TrackingId}", entries.Count(), request.Id);
+            return Ok(new JournalQueryResponse { Operations = entries });
         }
 
 

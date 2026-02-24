@@ -8,10 +8,11 @@ namespace CalculatorService.Core.Services
 
         public double Add(IEnumerable<double> addends)
         {
-            if (addends == null || addends.Count() < 2)
+            var list = addends?.ToList();
+            if (list == null || list.Count < 2)
                 throw new InvalidArgumentsException("At least two operands are required.");
 
-            return addends.Sum();
+            return list.Sum();
         }
 
         public double Subtract(double minuend, double subtrahend)
@@ -23,10 +24,11 @@ namespace CalculatorService.Core.Services
 
         public double Multiply(IEnumerable<double> factors) 
         {
-            if (factors == null || factors.Count() < 2)
+            var list = factors?.ToList();
+            if (list == null || list.Count < 2)
                 throw new InvalidArgumentsException("At least two operands are required.");
 
-            return factors.Aggregate(1.0, (acc, x) => acc * x);
+            return list.Aggregate(1.0, (acc, x) => acc * x);
 
         }
 

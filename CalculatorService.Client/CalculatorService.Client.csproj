@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CalculatorService.Core\CalculatorService.Core.csproj" />
-    <ProjectReference Include="..\CalculatorService.Server\CalculatorService.Server.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using CalculatorService.Core.Models;
 
 
 namespace CalculatorService.Client
 {
-    public class CalculatorApiClient
+    public class CalculatorApiClient : IDisposable
     {
         private readonly HttpClient _httpClient;
 
@@ -137,9 +136,9 @@ namespace CalculatorService.Client
         public async Task<IEnumerable<JournalEntry>> GetJournalAsync(string trackingId)
         {
             if (string.IsNullOrWhiteSpace(trackingId))
-                throw new ArgumentException("TRacking ID must be provided.", nameof(trackingId));
+                throw new ArgumentException("Tracking ID must be provided.", nameof(trackingId));
 
-            var request = new { Id = trackingId };
+            var request = new JournalQueryRequest { Id = trackingId };
             var response = await _httpClient.PostAsJsonAsync("journal/query", request);
 
             if(!response.IsSuccessStatusCode)
@@ -152,9 +151,9 @@ namespace CalculatorService.Client
             return result?.Operations ?? Enumerable.Empty<JournalEntry>();
         }
 
-        public class JournalQueryResponse
+        public void Dispose()
         {
-            public IEnumerable<JournalEntry> Operations { get; set; } = Enumerable.Empty<JournalEntry>();
+            _httpClient.Dispose();
         }
     }
 }

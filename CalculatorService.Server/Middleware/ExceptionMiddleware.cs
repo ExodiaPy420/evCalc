@@ -28,7 +28,7 @@ namespace CalculatorService.Server.Middleware
 
         private Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
-            _logger.LogError(ex, "An unhandled exception occurred.");
+            _logger.LogError(ex, "Unhandled exception on {Method} {Path}", context.Request.Method, context.Request.Path);
 
             int statusCode = ex switch
             {
@@ -37,7 +37,11 @@ namespace CalculatorService.Server.Middleware
                 _ => (int)HttpStatusCode.InternalServerError
             };
 
-            var response = new { ErrorCode = ex.GetType().Name, ErrorStatus = statusCode, ErrorMessage = ex.Message };
+            string errorCode = ex is BusinessException bex
+                ? bex.ErrorCode
+                : "InternalError";
+
+            var response = new { ErrorCode = errorCode, ErrorStatus = statusCode, ErrorMessage = ex.Message };
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = statusCode;

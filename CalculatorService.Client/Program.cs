@@ -251,6 +251,7 @@ namespace CalculatorService.ClientApp
 
         private static void Exit()
         {
+            _client.Dispose();
             Console.WriteLine("\nPress any key to exit.");
             Console.ReadKey();
         }

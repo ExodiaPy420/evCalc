@@ -1,1 +1,26 @@
-.vs
+# Visual Studio
+.vs/
+
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.rsuser
+
+# NuGet
+*.nupkg
+**/packages/
+
+# Logs
+logs/
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Journal data (runtime-generated)
+journal.json
