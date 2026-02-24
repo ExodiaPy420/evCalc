@@ -12,7 +12,6 @@ namespace CalculatorService.ClientApp
         {
             Initialize();
             await RunAsync();
-            await ShowJournalAsync();
             Exit();
         }
 
@@ -48,6 +47,7 @@ namespace CalculatorService.ClientApp
                     case 3: await MultAsync(); break;
                     case 4: await DivAsync(); break;
                     case 5: await SqrtAsync(); break;
+                    case 6: await ShowJournalAsync(); break;
                     case 0: Console.WriteLine("Closing calculator..."); break;
                     default: Console.WriteLine("Invalid option."); break;
                 }
@@ -63,6 +63,7 @@ namespace CalculatorService.ClientApp
             Console.WriteLine("3. Multiplication");
             Console.WriteLine("4. Division");
             Console.WriteLine("5. Square root");
+            Console.WriteLine("6. View calculation history");
             Console.WriteLine("0. Close calculator");
             Console.WriteLine("###########################################\n");
         }
@@ -182,23 +183,15 @@ namespace CalculatorService.ClientApp
 
         private static async Task ShowJournalAsync()
         {
-            Console.WriteLine("\nDo you want to see journal entries? (Y/N)");
-            var answer = Console.ReadLine()?.Trim().ToLowerInvariant();
-
-            if (answer != "y" && answer != "yes")
-                return;
-
-            string trackingId;
-            do
+            if (string.IsNullOrWhiteSpace(_trackingId))
             {
-                Console.Write("Enter tracking ID: ");
-                trackingId = Console.ReadLine() ?? "";
+                Console.WriteLine("No tracking ID configured — history not available.");
+                return;
             }
-            while (string.IsNullOrWhiteSpace(trackingId));
 
             try
             {
-                var entries = await _client.GetJournalAsync(trackingId);
+                var entries = await _client.GetJournalAsync(_trackingId);
 
                 if (!entries.Any())
                 {
@@ -206,11 +199,11 @@ namespace CalculatorService.ClientApp
                     return;
                 }
 
-                Console.WriteLine($"\nJournal entries for {trackingId}:");
+                Console.WriteLine($"\nCalculation history for {_trackingId}:");
 
                 foreach (var entry in entries)
                 {
-                    Console.WriteLine($"[{entry.Date}] {entry.Operation}: {entry.Calculation}");
+                    Console.WriteLine($"  [{entry.Date:u}] {entry.Operation}: {entry.Calculation}");
                 }
             }
             catch (Exception ex)

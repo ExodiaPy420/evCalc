@@ -5,7 +5,11 @@ using CalculatorService.Server.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICalculatorOperations, CalculatorOperations>();
-builder.Services.AddSingleton<IJournalService, JournalService>();
+builder.Services.AddSingleton<IJournalService>(sp =>
+{
+    var journalPath = Path.Combine(AppContext.BaseDirectory, "journal.json");
+    return new JournalService(journalPath);
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
