@@ -237,10 +237,28 @@ namespace CalculatorService.ClientApp
             Console.Write(prompt);
             var input = Console.ReadLine() ?? "";
 
-            return input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                        .Where(x => double.TryParse(x, out _))
-                        .Select(double.Parse)
-                        .ToList();
+            var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var validNumbers = new List<double>();
+            var invalidInputs = new List<string>();
+
+            foreach (var part in parts)
+            {
+                if (double.TryParse(part, out var number))
+                {
+                    validNumbers.Add(number);
+                }
+                else
+                {
+                    invalidInputs.Add(part);
+                }
+            }
+
+            if (invalidInputs.Any())
+            {
+                Console.WriteLine($"Invalid inputs detected will be omitted: {string.Join(", ", invalidInputs)}");
+            }
+
+            return validNumbers;
         }
 
         private static void PrintTracking()
