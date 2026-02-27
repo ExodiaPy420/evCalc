@@ -13,6 +13,7 @@ namespace CalculatorService.Core.Services
                 throw new InvalidArgumentsException("At least two operands are required.");
 
             return list.Sum();
+            // PETICIONES AL SERVIDOR
         }
 
         public double Subtract(double minuend, double subtrahend)
@@ -34,7 +35,7 @@ namespace CalculatorService.Core.Services
 
 
 
-        public (double Quotient, double Remainder) Divide(double dividend, double divisor)
+        /*public DivideResponse */public (double Quotient, double Remainder) Divide(double dividend, double divisor)
         {
             if (divisor == 0) throw new DivisionByZeroException();
 

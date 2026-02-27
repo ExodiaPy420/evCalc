@@ -13,7 +13,9 @@ namespace CalculatorService.Server.Controllers
         private readonly IJournalService _journal;
         private readonly ILogger<CalculatorController> _logger;
 
-        public CalculatorController(ICalculatorOperations calculator, IJournalService journal, ILogger<CalculatorController> logger)
+        private const string X_EVI_TRACKING_ID_HEADER = "X-Evi-Tracking-Id";
+
+		public CalculatorController(ICalculatorOperations calculator, IJournalService journal, ILogger<CalculatorController> logger)
         {
             _calculator = calculator;
             _journal = journal;
@@ -51,7 +53,7 @@ namespace CalculatorService.Server.Controllers
 
             double result = _calculator.Multiply(request.Factors);
 
-            string trackingId = Request.Headers["X-Evi-Tracking-Id"];
+            string trackingId = Request.Headers[X_EVI_TRACKING_ID_HEADER];
             if (!string.IsNullOrWhiteSpace(trackingId))
             {
                 _journal.Save(trackingId, new JournalEntry("Mul", $"{string.Join(" * ", request.Factors)} = {result}"));
@@ -87,7 +89,7 @@ namespace CalculatorService.Server.Controllers
         public IActionResult Sqrt([FromBody] SqrtRequest request)
         {
             if (request == null)
-                throw new InvalidArgumentsException("A number is required.");
+				throw new InvalidArgumentsException("A number is required.");
 
             _logger.LogInformation("Sqrt requested: √{Number}", request.Number);
 

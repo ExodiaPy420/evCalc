@@ -13,7 +13,9 @@ namespace CalculatorService.Server.Controllers
 
         public JournalController(IJournalService journal, ILogger<JournalController> logger)
         {
-            _journal = journal;
+            if (journal == null) throw new ArgumentNullException(nameof(journal));
+
+			_journal = journal;
             _logger = logger;
         }
 

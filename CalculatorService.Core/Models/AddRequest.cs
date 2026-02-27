@@ -1,7 +1,10 @@
-﻿namespace CalculatorService.Core.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CalculatorService.Core.Models
 {
-    public class AddRequest
-    {
-        public IEnumerable<double> Addends { get; set; }
-    }
+	public class AddRequest
+	{
+		[MinLength(2)]
+		public IEnumerable<double> Addends { get; set; }
+	}
 }

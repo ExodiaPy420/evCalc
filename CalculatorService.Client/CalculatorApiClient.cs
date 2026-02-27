@@ -1,135 +1,164 @@
 ﻿using System.Net.Http.Json;
 using CalculatorService.Core.Models;
+using RestSharp;
 
 
 namespace CalculatorService.Client
 {
     public class CalculatorApiClient : IDisposable
     {
-        private readonly HttpClient _httpClient;
+        private readonly RestClient _client;
 
-        public CalculatorApiClient(string baseUrl)
+        
+
+
+		public CalculatorApiClient(string baseUrl)
         {
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(baseUrl),
-                Timeout = TimeSpan.FromSeconds(5)
-            };
-        }
+			var options = new RestClientOptions(baseUrl) { Timeout = TimeSpan.Parse("0.00:00:05") };
+
+			_client = new RestClient(options);
+		}
         public async Task<AddResponse> AddAsync(IEnumerable<double> addends, string trackingId = null)
         {
-            var request = new AddRequest { Addends = addends };
+            var requestBody = new AddRequest { Addends = addends };
 
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/add")
-            {
+            //var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/add");
+
+            var request = new RestRequest("calculator/add", Method.Post).AddJsonBody(requestBody);
+
+            /*{
                 Content = JsonContent.Create(request)
-            };
+            };*/
 
             if (!string.IsNullOrWhiteSpace(trackingId))
-                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+                request.AddHeader("X-Evi-Tracking-Id", trackingId);
 
-            var response = await _httpClient.SendAsync(httpRequest);
+            var response = await _client.ExecuteAsync<AddResponse>(request);
 
             if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new Exception($"API Error: {response.StatusCode} - {error}");
+                throw new Exception($"API Error: {response.StatusCode} - {response.Content}");
             }
 
-            return await response.Content.ReadFromJsonAsync<AddResponse>();
+            if (response.Data is null)
+                throw new Exception("API Error: Empty response body.");
+
+            return response.Data;
+
+            //return await response.Content.ReadFromJsonAsync<AddResponse>();
         }
 
 
         public async Task<DivResponse> DivAsync(double dividend, double divisor, string trackingId = null)
         {
-            var request = new DivRequest { Dividend = dividend, Divisor = divisor };
+            var requestBody = new DivRequest { Dividend = dividend, Divisor = divisor };
 
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/div")
+            var request = new RestRequest("calculator/div", Method.Post).AddJsonBody(requestBody);
+
+			/*var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/div")
             {
                 Content = JsonContent.Create(request)
-            };
+            };*/
 
             if (!string.IsNullOrWhiteSpace(trackingId))
-                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+                request.AddHeader("X-Evi-Tracking-Id", trackingId);
 
-            var response = await _httpClient.SendAsync(httpRequest);
+            var response = await _client.ExecuteAsync<DivResponse>(request);
 
             if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new Exception($"API Error: {response.StatusCode} - {error}");
+                throw new Exception($"API Error: {response.StatusCode} - {response.Content}");
             }
 
-            return await response.Content.ReadFromJsonAsync<DivResponse>();
+            if (response.Data is null)
+                throw new Exception("API Error: Empty response body.");
+
+			return response.Data;
         }
 
         public async Task<SqrtResponse> SqrtAsync(double number, string trackingId = null)
         {
-            var request = new SqrtRequest { Number = number };
 
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/sqrt")
-            {
+            var requestBody = new SqrtRequest { Number = number };
+            //var request = new SqrtRequest { Number = number };
+
+            var request = new RestRequest("calculator/sqrt", Method.Post).AddJsonBody(requestBody);
+            /*{
                 Content = JsonContent.Create(request)
-            };
+            };*/
 
-            if (!string.IsNullOrWhiteSpace(trackingId))
-                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+			if (!string.IsNullOrWhiteSpace(trackingId))
+                request.AddHeader("X-Evi-Tracking-Id", trackingId);
 
-            var response = await _httpClient.SendAsync(httpRequest);
+			var response = await _client.ExecuteAsync<SqrtResponse>(request);
 
-            if (!response.IsSuccessStatusCode)
+			if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new Exception($"API Error: {response.StatusCode} - {error}");
+                throw new Exception($"API Error: {response.StatusCode} - {response.Content}");
             }
 
-            return await response.Content.ReadFromJsonAsync<SqrtResponse>();
+            if (response.Data is null)
+                throw new Exception("API Error: Empty response body.");
+
+            return response.Data;
         }
 
         public async Task<MultResponse> MultAsync(IEnumerable<double> factors, string trackingId = null)
         {
-            var request = new MultRequest { Factors = factors };
+            //var request = new MultRequest { Factors = factors };
+            var requestBody = new MultRequest { Factors = factors };
 
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/mult")
+            var request = new RestRequest("calculator/mult", Method.Post).AddJsonBody(requestBody);
+
+			/*var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/mult")
             {
                 Content = JsonContent.Create(request)
-            };
+            };*/
 
             if (!string.IsNullOrWhiteSpace(trackingId))
-                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+                request.AddHeader("X-Evi-Tracking-Id", trackingId);
 
-            var response = await _httpClient.SendAsync(httpRequest);
+			var response = await _client.ExecuteAsync<MultResponse>(request);
 
-            if (!response.IsSuccessStatusCode)
+			if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new Exception($"API Error: {response.StatusCode} - {error}");
+                throw new Exception($"API Error: {response.StatusCode} - {response.Content}");
             }
+            if (response.Data is null)
+                throw new Exception("API Error: Empty response body.");
 
-            return await response.Content.ReadFromJsonAsync<MultResponse>();
+			return response.Data;
         }
 
         public async Task<SubResponse> SubAsync(double minuend, double subtrahend, string trackingId = null)
         {
-            var request = new SubRequest { Minuend = minuend, Subtrahend = subtrahend };
+            var requestBody = new SubRequest { Minuend = minuend, Subtrahend = subtrahend };
 
-            var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/sub")
+			//var request = new SubRequest { Minuend = minuend, Subtrahend = subtrahend };
+
+            var request = new RestRequest("calculator/sub", Method.Post).AddJsonBody(requestBody);
+
+			/*var httpRequest = new HttpRequestMessage(HttpMethod.Post, "calculator/sub")
             {
                 Content = JsonContent.Create(request)
-            };
+            };*/
 
             if (!string.IsNullOrWhiteSpace(trackingId))
-                httpRequest.Headers.Add("X-Evi-Tracking-Id", trackingId);
+                request.AddHeader("X-Evi-Tracking-Id", trackingId);
 
-            var response = await _httpClient.SendAsync(httpRequest);
+            //var response = await _client.SendAsync(httpRequest);
+            var response = await _client.ExecuteAsync<SubResponse>(request);
 
-            if (!response.IsSuccessStatusCode)
+			if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new Exception($"API Error: {response.StatusCode} - {error}");
+                throw new Exception($"API Error: {response.StatusCode} - {response.Content}");
             }
 
-            return await response.Content.ReadFromJsonAsync<SubResponse>();
+            if (response.Data is null)
+                throw new Exception("API Error: Empty response body.");
+
+
+			return response.Data;
         }
 
 
@@ -138,22 +167,31 @@ namespace CalculatorService.Client
             if (string.IsNullOrWhiteSpace(trackingId))
                 throw new ArgumentException("Tracking ID must be provided.", nameof(trackingId));
 
-            var request = new JournalQueryRequest { Id = trackingId };
-            var response = await _httpClient.PostAsJsonAsync("journal/query", request);
 
-            if(!response.IsSuccessStatusCode)
+            var requestBody = new JournalQueryRequest { Id = trackingId };
+
+            var request = new RestRequest("journal/query", Method.Post).AddJsonBody(requestBody);
+
+			//var request = new JournalQueryRequest { Id = trackingId };
+            //var response = await _client.PostAsJsonAsync("journal/query", request);
+
+            var response = await _client.ExecuteAsync<JournalQueryResponse>(request);
+
+			if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadAsStringAsync();
-                throw new Exception($"API Error: {response.StatusCode} - {error}");
+                throw new Exception($"API Error: {response.StatusCode} - {response.Content}");
             }
 
-            var result = await response.Content.ReadFromJsonAsync<JournalQueryResponse>();
-            return result?.Operations ?? Enumerable.Empty<JournalEntry>();
+            if (response.Data is null)
+                throw new Exception("API Error: Empty response body.");
+
+            //var result = await response.Content.ReadFromJsonAsync<JournalQueryResponse>();
+            return response.Data.Operations ?? Enumerable.Empty<JournalEntry>();
         }
 
         public void Dispose()
         {
-            _httpClient.Dispose();
+            _client.Dispose();
         }
     }
 }

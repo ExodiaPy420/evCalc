@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RestSharp" Version="113.1.0" />
     <PackageReference Include="System.Net.Http.Json" Version="10.0.3" />
   </ItemGroup>
 

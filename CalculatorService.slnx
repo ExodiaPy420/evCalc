@@ -2,4 +2,5 @@
   <Project Path="CalculatorService.Client/CalculatorService.Client.csproj" />
   <Project Path="CalculatorService.Core/CalculatorService.Core.csproj" />
   <Project Path="CalculatorService.Server/CalculatorService.Server.csproj" />
+  <Project Path="CalculatorService.Tests/CalculatorService.Tests.csproj" />
 </Solution>
